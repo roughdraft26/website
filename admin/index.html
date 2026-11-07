@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- never let the editor turn up in search results -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Rough Draft Creatives &middot; Editor</title>
+
+<link href="/admin/config.yml" type="application/yaml" rel="cms-config-url">
+
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  #loading {
+    position: fixed; inset: 0; display: grid; place-content: center;
+    gap: .75rem; text-align: center; padding: 2rem;
+    background: #FBFAF7; color: #1B1A17;
+  }
+  #loading h1 { font-size: 1.1rem; font-weight: 600; margin: 0; }
+  #loading p  { font-size: .9rem; color: #55534B; margin: 0; max-width: 32rem; }
+  @media (prefers-color-scheme: dark) {
+    #loading { background: #1B1A17; color: #F4F2EC; }
+    #loading p { color: #B8B3A8; }
+  }
+</style>
+</head>
+<body>
+
+<!-- shown until the editor takes over, so a failure is not a blank page -->
+<div id="loading">
+  <h1>Opening the editor&hellip;</h1>
+  <p>If this message stays on screen, the editor could not start. See
+     <strong>HANDOVER.md</strong> in the site folder, under "If the editor will not open".</p>
+</div>
+
+<script src="/admin/cms/sveltia-cms.js"></script>
+</body>
+</html>

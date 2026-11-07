@@ -1,0 +1,4 @@
+@sveltia/cms 0.261.0  MIT
+Vendored from npm on 2026-11-07. Served locally so the admin loads
+nothing from a third-party CDN. To update: npm pack @sveltia/cms and
+replace sveltia-cms.js plus the chunks folder.

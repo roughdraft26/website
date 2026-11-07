@@ -1,0 +1,256 @@
+# ---------------------------------------------------------------------------
+# ROUGH DRAFT CREATIVES  ·  editor configuration
+#
+# Three values below must be filled in once, before the editor will work.
+# They are marked FILL IN. Everything else is already set.
+#
+# See HANDOVER.md in the site folder for how to get them.
+# ---------------------------------------------------------------------------
+
+backend:
+  name: github
+  repo: FILL-IN-ORG/FILL-IN-REPO     # FILL IN  e.g. roughdraftcreatives/website
+  branch: main
+  base_url: https://FILL-IN.workers.dev   # FILL IN  the sign-in helper
+  commit_messages:
+    create: 'Add {{collection}} entry'
+    update: 'Update {{collection}}'
+    delete: 'Remove {{collection}} entry'
+    uploadMedia: 'Add image {{path}}'
+    deleteMedia: 'Remove image {{path}}'
+
+# Edits go live as soon as they are saved.
+publish_mode: simple
+
+# Where uploaded pictures are stored, and the path the site uses to find them.
+media_folder: assets
+public_folder: assets
+
+# Pictures are accepted as JPEG, PNG or WebP only.
+# This deliberately rules out two things:
+#   HEIC, which iPhones shoot by default and most browsers cannot display
+#   SVG, which can carry hidden code
+media_library:
+  config:
+    max_file_size: 5000000   # 5 MB, so a huge photo cannot slow the site down
+
+collections:
+
+  # -------------------------------------------------------------------------
+  - name: events
+    label: Events
+    icon: event
+    files:
+      - name: events
+        label: Upcoming and past events
+        file: content/events.json
+        description: >
+          Add the next gathering here. The newest upcoming date is shown at the
+          top of the site and in the pop-up that greets visitors. Events whose
+          date has passed disappear on their own, so there is nothing to delete.
+        fields:
+          - name: events
+            label: Events
+            label_singular: event
+            widget: list
+            collapsed: false
+            summary: '{{fields.date}}  ·  {{fields.title}}'
+            fields:
+              - { name: date, label: Date, widget: datetime,
+                  date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true,
+                  hint: 'The day of the gathering. Once this date has passed the event removes itself from the site.' }
+
+              - { name: title, label: Title, widget: string,
+                  hint: 'What the gathering is called, for example: The He(art) of Us' }
+
+              - { name: time, label: Time, widget: string, required: false,
+                  hint: 'Written however you want it to read, for example: 4.30pm to 7.30pm' }
+
+              - { name: place, label: Place, widget: string, required: false,
+                  hint: 'Venue, and how to book, for example: Blanchardstown Library. Booking on Eventbrite.' }
+
+              - { name: link, label: Booking link, widget: string, required: false,
+                  pattern: ['^$|^https://', 'Must start with https:// or be left empty'],
+                  hint: 'Optional. The Eventbrite or ticket link. Leave empty if there is none.' }
+
+              - { name: flyer, label: Flyer, widget: image, required: false,
+                  accept: 'image/jpeg,image/png,image/webp',
+                  hint: 'The flyer artwork. It appears both on the page and in the pop-up. JPEG, PNG or WebP.' }
+
+              - { name: flyerAlt, label: Flyer description, widget: text, required: false,
+                  hint: 'Describe the flyer for people using a screen reader, including the date, time and venue printed on it. Required if you add a flyer.' }
+
+  # -------------------------------------------------------------------------
+  - name: drafts
+    label: Archived Drafts
+    icon: photo_library
+    files:
+      - name: drafts
+        label: Archived drafts
+        file: content/drafts.json
+        description: >
+          One entry per gathering that has happened. Newest first. The reflection
+          is the short write-up someone from the community contributes afterwards.
+        fields:
+          - name: drafts
+            label: Drafts
+            label_singular: draft
+            widget: list
+            collapsed: true
+            summary: 'Draft {{fields.no}}  ·  {{fields.title}}'
+            fields:
+              - { name: 'no', label: Draft number, widget: string,
+                  hint: 'Just the number, for example: 13' }
+
+              - { name: title, label: Title, widget: string,
+                  hint: 'What this draft was called, for example: Access: Beyond Pathways' }
+
+              - { name: photo, label: Photograph, widget: image, required: false,
+                  accept: 'image/jpeg,image/png,image/webp',
+                  hint: 'JPEG, PNG or WebP. Leave empty if the pictures are not ready yet and tick the box below instead.' }
+
+              - { name: alt, label: Photograph description, widget: text, required: false,
+                  hint: 'Describe what is happening in the photograph, for someone who cannot see it. Required if you add a photograph.' }
+
+              - { name: comingSoon, label: Pictures still to come, widget: boolean, default: false, required: false,
+                  hint: 'Tick this if the gathering has happened but the pictures are not ready. The entry shows as coming soon.' }
+
+              - { name: note, label: Short note, widget: string, required: false,
+                  hint: 'One line, shown under the title. Optional.' }
+
+              - name: reflection
+                label: Reflection
+                widget: markdown
+                required: false
+                modes: [rich_text]
+                buttons: [bold, italic, link]
+                editor_components: []
+                hint: >
+                  The write-up about this gathering, half a page to a page.
+                  You can use bold, italics and links. Headings, pictures and
+                  tables are deliberately not available, so the page keeps its
+                  shape.
+
+              - { name: reflectionBy, label: Reflection written by, widget: string, required: false,
+                  hint: 'Who wrote it. Shown underneath as a credit.' }
+
+  # -------------------------------------------------------------------------
+  - name: weavers
+    label: Space Weavers
+    icon: group
+    files:
+      - name: weavers
+        label: Space weavers
+        file: content/weavers.json
+        description: >
+          People who have facilitated for us, or performed as guests.
+        fields:
+          - name: weavers
+            label: Weavers
+            label_singular: weaver
+            widget: list
+            collapsed: false
+            summary: '{{fields.name}}'
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: credit, label: What they did, widget: string, required: false,
+                  hint: 'For example: Guest performer, or Facilitated the writing session' }
+              - { name: url, label: Link, widget: string, required: false,
+                  pattern: ['^$|^https://', 'Must start with https:// or be left empty'],
+                  hint: 'Optional. Their website or Instagram.' }
+
+  # -------------------------------------------------------------------------
+  - name: resources
+    label: Network supports
+    icon: link
+    files:
+      - name: resources
+        label: Network supports for marginalised communities in Ireland
+        file: content/resources.json
+        fields:
+          - name: resources
+            label: Supports
+            label_singular: support
+            widget: list
+            collapsed: false
+            summary: '{{fields.name}}'
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: url, label: Link, widget: string,
+                  pattern: ['^https://', 'Must start with https://'] }
+              - { name: note, label: One line about it, widget: string, required: false,
+                  hint: 'Why it is here, in a single line.' }
+              - { name: by, label: Whose it is, widget: string, required: false }
+              - { name: group, label: Group it under, widget: string, required: false,
+                  hint: 'Optional. Entries sharing a group are listed together under that heading.' }
+
+  # -------------------------------------------------------------------------
+  - name: pieces
+    label: Poetry
+    icon: menu_book
+    files:
+      - name: pieces
+        label: Pieces
+        file: content/pieces.json
+        fields:
+          - name: pieces
+            label: Pieces
+            label_singular: piece
+            widget: list
+            collapsed: true
+            summary: '{{fields.title}}'
+            fields:
+              - { name: 'no', label: Number, widget: string, required: false }
+              - { name: title, label: Title, widget: string }
+              - { name: credit, label: Written by, widget: string, required: false }
+              - { name: stanzas, label: The poem, widget: text, required: false,
+                  hint: 'Leave an empty line between stanzas.' }
+              - { name: artwork, label: Artwork, widget: image, required: false,
+                  accept: 'image/jpeg,image/png,image/webp' }
+              - { name: alt, label: Artwork description, widget: text, required: false,
+                  hint: 'Required if you add artwork.' }
+              - { name: note, label: Note, widget: string, required: false }
+
+  # -------------------------------------------------------------------------
+  - name: settings
+    label: Settings
+    icon: settings
+    files:
+      - name: settings
+        label: Site settings
+        file: content/settings.json
+        description: >
+          These rarely change. Be careful here: a wrong email address means
+          nobody can reach you.
+        fields:
+          - { name: contactEmail, label: Contact email, widget: string,
+              pattern: ['^[^@\s]+@[^@\s]+\.[^@\s]+$', 'That does not look like an email address'],
+              hint: 'Every form on the site sends to this address.' }
+
+          - { name: instagram, label: Instagram link, widget: string, required: false,
+              pattern: ['^$|^https://', 'Must start with https:// or be left empty'] }
+
+          - { name: teamFormUrl, label: Join the team form, widget: string, required: false,
+              pattern: ['^$|^https://', 'Must start with https:// or be left empty'],
+              hint: 'The public Google Form link, the one ending in /viewform. Test it in a private window before saving.' }
+
+          - name: donate
+            label: Pledge amounts
+            widget: object
+            collapsed: true
+            fields:
+              - { name: currency, label: Currency symbol, widget: string, default: '€' }
+              - name: once
+                label: One-off amounts
+                widget: list
+                fields:
+                  - { name: amount, label: Amount, widget: string, required: false }
+                  - { name: label, label: Wording instead of an amount, widget: string, required: false }
+                  - { name: url, label: Payment link, widget: string, required: false }
+              - name: monthly
+                label: Monthly amounts
+                widget: list
+                fields:
+                  - { name: amount, label: Amount, widget: string, required: false }
+                  - { name: label, label: Wording instead of an amount, widget: string, required: false }
+                  - { name: url, label: Payment link, widget: string, required: false }

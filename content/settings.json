@@ -1,0 +1,52 @@
+{
+  "contactEmail": "connect@roughdraftcreatives.ie",
+  "instagram": "https://www.instagram.com/roughdraft.poetry/",
+  "teamFormUrl": "https://docs.google.com/forms/d/13YnMhguU5gluGamFiGqdS9VpukxKFYi16p9OoLvAui8/viewform",
+  "donate": {
+    "currency": "€",
+    "once": [
+      {
+        "amount": "5",
+        "label": "",
+        "url": ""
+      },
+      {
+        "amount": "10",
+        "label": "",
+        "url": ""
+      },
+      {
+        "amount": "15",
+        "label": "",
+        "url": ""
+      },
+      {
+        "amount": "",
+        "label": "Feel free to surprise us",
+        "url": ""
+      }
+    ],
+    "monthly": [
+      {
+        "amount": "5",
+        "label": "",
+        "url": ""
+      },
+      {
+        "amount": "10",
+        "label": "",
+        "url": ""
+      },
+      {
+        "amount": "15",
+        "label": "",
+        "url": ""
+      },
+      {
+        "amount": "",
+        "label": "Feel free to surprise us",
+        "url": ""
+      }
+    ]
+  }
+}
