@@ -1,5 +1,4 @@
-﻿{
-  "//": "ORDER MATTERS. When two rules match the same path and set the same header, Vercel applies the LAST one. The site-wide rule must therefore come BEFORE the /admin rules.",
+{
   "headers": [
     { "source": "/content/(.*)",
       "headers": [ { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" } ] },
