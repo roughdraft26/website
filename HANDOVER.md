@@ -8,55 +8,72 @@ This file is the manual. Keep it in the repository so it cannot be lost.
 
 ---
 
-## Part 1 · Setup, once only
+## Part 1 · How it is set up
 
-Three values in `admin/config.yml` are marked `FILL IN`. Until they are filled
-in, the editor will not sign in. Someone technical does this once.
+This is already done and working. It is written down so that whoever looks
+after the site next can see how the pieces fit together.
 
-### 1. The repository
+Everything below is on a free plan. Nothing here costs money.
 
-The site must live in a GitHub repository owned by **Rough Draft Creatives**,
-not by any individual. An organisation account is better than a personal one,
-because people can be added and removed without handing over a password.
+### The accounts
 
-In `admin/config.yml`:
+All three belong to Rough Draft Creatives, not to any individual. They are all
+tied to `connect@roughdraftcreatives.ie`.
+
+| What | Where | Does what |
+|---|---|---|
+| GitHub | user `roughdraft26`, repository `website` | Holds the site and every version of it |
+| Vercel | `roughdraft26's projects`, project `website` | Serves the site, rebuilds on every save |
+| Cloudflare | Worker `sveltia-cms-auth` | Hands sign-in off to GitHub |
+
+The domain `roughdraftcreatives.ie` is registered at Register365. Its DNS
+points at Vercel. **Do not change the MX records**, they carry the email.
+
+### How a save reaches the website
+
+Someone edits at `/admin` and saves. The editor writes the change straight into
+the GitHub repository. Vercel sees the change and redeploys. The site is live
+about a minute later. There is no separate publish step and no approval queue.
+
+### The sign-in helper
+
+GitHub will not accept a sign-in directly from a static site, so a small
+free Cloudflare Worker sits in between. It is deployed at:
+
+```
+https://sveltia-cms-auth.connect-1cf.workers.dev
+```
+
+It pairs with a GitHub OAuth App called **Rough Draft Creatives CMS**, owned by
+`roughdraft26`. The Worker holds three settings: the app's client ID, its
+client secret, and `ALLOWED_DOMAINS`, which is set to
+`www.roughdraftcreatives.ie` so the Worker only ever signs people in from this
+site.
+
+The matching values live in `admin/config.yml`:
 
 ```yaml
-repo: your-org/your-repo        # for example: roughdraftcreatives/website
+repo: roughdraft26/website
 branch: main
+base_url: https://sveltia-cms-auth.connect-1cf.workers.dev
 ```
 
-### 2. Connect the repository to Vercel
+None of this needs touching again unless the repository moves or the Worker is
+redeployed.
 
-In Vercel, open the project, then Settings, then Git, and connect it to that
-repository. From then on the site rebuilds by itself every time something is
-saved in the editor. Nothing is uploaded by hand ever again.
+### Giving someone editing access
 
-### 3. The sign-in helper
+Add them as a collaborator on `roughdraft26/website` with **write** access.
+GitHub, repository, Settings, Collaborators, Add people.
 
-The editor signs people in through GitHub. That needs a small free helper
-service, because GitHub will not accept a sign-in directly from a static site.
+That is all they need. They go to `/admin` and sign in with their own GitHub
+account.
 
-1. Create a **GitHub OAuth App** under the organisation's settings.
-   Developer settings, then OAuth Apps, then New OAuth App.
-   Homepage URL: `https://www.roughdraftcreatives.ie`
-   Authorization callback URL: the worker address from step 2 below, plus
-   `/callback`.
-2. Deploy the **sveltia-cms-auth** worker to a free Cloudflare account.
-   It is a copy-and-deploy job, no code to write. The project's own
-   instructions cover it.
-3. Put the worker address into `admin/config.yml`:
+### Taking access away
 
-```yaml
-base_url: https://your-worker-name.workers.dev
-```
-
-The Cloudflare account should also be in the organisation's name.
-
-### 4. Give the editor access
-
-Add them to the GitHub organisation with **write** access to the repository.
-That is all they need. They sign in at `/admin` with their GitHub account.
+Remove them as a collaborator. That cuts them off immediately, whether or not
+they are signed in. Do not share one login between people, give each person
+their own GitHub account so access can be removed one at a time.
 
 ---
 

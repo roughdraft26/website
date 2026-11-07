@@ -1,17 +1,17 @@
 # ---------------------------------------------------------------------------
 # ROUGH DRAFT CREATIVES  ·  editor configuration
 #
-# Three values below must be filled in once, before the editor will work.
-# They are marked FILL IN. Everything else is already set.
+# Everything below is set up and working. Do not change it unless the
+# GitHub repository moves or the sign-in helper is redeployed.
 #
-# See HANDOVER.md in the site folder for how to get them.
+# See HANDOVER.md in the site folder for what each piece does.
 # ---------------------------------------------------------------------------
 
 backend:
   name: github
-  repo: FILL-IN-ORG/FILL-IN-REPO     # FILL IN  e.g. roughdraftcreatives/website
+  repo: roughdraft26/website
   branch: main
-  base_url: https://FILL-IN.workers.dev   # FILL IN  the sign-in helper
+  base_url: https://sveltia-cms-auth.connect-1cf.workers.dev
   commit_messages:
     create: 'Add {{collection}} entry'
     update: 'Update {{collection}}'
